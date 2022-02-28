@@ -1,26 +1,75 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+	<div class="app-container">
+		<div>
+			<AppHeader/>
+		</div>
+		<div>
+			<JokeGenerator/>
+		</div>
+		<div>
+			<JokesHistory/>
+		</div>
+		<AppPopup v-if="showPopup"/>
+	</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+	import AppHeader from "@/components/AppHeader";
+	import JokeGenerator from "@/components/JokeGenerator";
+	import JokesHistory from "@/components/JokesHistory";
+	import AppPopup from "@/components/AppPopup";
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+	export default {
+		name: 'App',
+		data: () => {
+			return {
+				showPopup: false
+			}
+		},
+		components: {
+			AppHeader,
+			JokeGenerator,
+			JokesHistory,
+			AppPopup
+		},
+		mounted: function() {
+			setTimeout(() => {
+				this.showPopup = true;
+			}, 25000);
+
+			this.emitter.on('close-popup', () => {
+				this.showPopup = false;
+			});
+		}
+	}
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+	body {
+		background: #fafafa;
+		margin: 0;
+		padding: 0;
+	}
+
+	#app {
+		font-family: Avenir, Helvetica, Arial, sans-serif;
+		color: #2c3e50;
+
+		.app-container {
+			display: flex;
+			flex-direction: column;
+
+			> div {
+				min-height: 25vh;
+				display: flex;
+				justify-content: center;
+				flex-direction: column;
+				align-items: center;
+
+				&:last-of-type {
+					min-height: 50vh;
+				}
+			}
+		}
+	}
 </style>
