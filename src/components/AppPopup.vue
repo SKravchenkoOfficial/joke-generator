@@ -14,6 +14,7 @@
 		name: "AppPopup",
 		methods: {
 			closePopup: function() {
+				// Fire event to the host component to close popup
 				this.emitter.emit('close-popup');
 			}
 		}

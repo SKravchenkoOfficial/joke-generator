@@ -5,9 +5,9 @@
 </template>
 
 <script>
-export default {
-	name: "AppSpinner"
-}
+	export default {
+		name: "AppSpinner"
+	}
 </script>
 
 <style lang="scss" scoped>

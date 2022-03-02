@@ -38,6 +38,7 @@
 			AppSpinner
 		},
 		computed: {
+			// Method to convert default JS time to human-readable format like 01.01.2022 11:10
 			convertedJokeGeneratedDate: function() {
 				if (this.currentJoke.generated_at) {
 					const date = this.currentJoke.generated_at;
@@ -46,6 +47,7 @@
 						return ('0' + number).slice(-2);
 					}
 
+					// Parsing each component of time and setting zero before a number if less than 10
 					return getFullNumber(date.getDate()) + '.' + getFullNumber(date.getMonth()) + '.'
 						+ getFullNumber(date.getFullYear()) + ' ' + getFullNumber(date.getHours()) + ':'
 						+ getFullNumber(date.getMinutes());
@@ -59,15 +61,18 @@
 				this.showSpinner = true;
 
 				try {
+					// Get new joke from the Data provider
 					this.currentJoke = await DataProvider.getJoke();
 					this.currentJoke.generated_at = new Date();
 
+					// Saving joke into a local storage for history
 					let savedJokes = JSON.parse(localStorage.getItem('jokes')) || [];
 					savedJokes = [
 						this.currentJoke
 					].concat(savedJokes);
 					localStorage.setItem('jokes', JSON.stringify(savedJokes));
 
+					// Firing event to refresh the history component
 					this.emitter.emit('refresh-history');
 				} catch (e) {
 					console.error(e);

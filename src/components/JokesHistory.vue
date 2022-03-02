@@ -27,33 +27,45 @@
 			getTimeDifference: (date) => {
 				const difference = (new Date() - new Date(date)) / 1000;
 
-				if (difference < 3) {
+				// Time in seconds to show different labels
+				const threeSeconds = 3;
+				const oneMinute = 60;
+				const twoMinutes = oneMinute * 2;
+				const oneHour = 3600;
+				const twoHours = oneHour * 2;
+				const oneDay = oneHour * 24;
+
+				// Calculating different labels based on the joke generated date
+				if (difference < threeSeconds) {
 					return 'Just now';
-				} else if (difference < 60) {
+				} else if (difference < oneMinute) {
 					return 'less than a minute ago'
-				} else if (difference < 120) {
+				} else if (difference < twoMinutes) {
 					return '1 minute ago';
-				} else if (difference < 3600) {
-					return Math.floor(difference / 60) + ' minutes ago';
-				} else if (difference < 7200) {
+				} else if (difference < oneHour) {
+					return Math.floor(difference / oneMinute) + ' minutes ago';
+				} else if (difference < twoHours) {
 					return '1 hour ago';
-				} else if (difference < 86400) {
-					return Math.floor(difference / 3600) + ' hours ago';
+				} else if (difference < oneDay) {
+					return Math.floor(difference / oneHour) + ' hours ago';
 				} else {
-					return 'long time ago';
+					return 'A long time ago';
 				}
 			}
 		},
 		mounted: function() {
+			// Event handler to refresh history component when a new joke generated
 			this.emitter.on('refresh-history', () => {
 				this.historicalData = JSON.parse(localStorage.getItem('jokes'));
 			});
 
+			// Timer to refresh joke generated time once per second
 			this.refreshTimerId = setInterval(() => {
 				this.historicalData = JSON.parse(localStorage.getItem('jokes'));
 			}, 1000);
 		},
 		beforeUnmount: function() {
+			// Clear interval for component refresh
 			if (this.refreshTimerId) {
 				clearInterval(this.refreshTimerId);
 
